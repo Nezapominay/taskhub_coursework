@@ -1,0 +1,55 @@
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: taskhub-postgres
+    environment:
+      POSTGRES_USER: taskhub
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: taskhubdb
+    ports:
+      - "5432:5432"
+    networks:
+      - taskhub-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: taskhub-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - taskhub-net
+
+  redis:
+    image: redis:7
+    container_name: taskhub-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - taskhub-net
+
+  api:
+    image: taskhub-api
+    container_name: taskhub-api
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+    ports:
+      - "8080:8080"
+    networks:
+      - taskhub-net
+
+  worker:
+    image: taskhub-worker
+    container_name: taskhub-worker
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - taskhub-net
+
+networks:
+  taskhub-net:
+    driver: bridge

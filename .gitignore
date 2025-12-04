@@ -65,7 +65,6 @@ spring.log
 # ======================
 # local docker-compose overrides / env files
 docker-compose.override.yml
-docker-compose.*.yml
 **/docker-compose.override.yml
 **/*.env
 
