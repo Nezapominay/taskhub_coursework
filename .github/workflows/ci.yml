@@ -32,9 +32,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Make gradlew executable (api-service)
+        working-directory: api-service
+        run: chmod +x gradlew
+
       - name: Build api-service
         working-directory: api-service
         run: ./gradlew build --no-daemon
+
+      - name: Make gradlew executable (worker)
+        working-directory: worker
+        run: chmod +x gradlew
 
       - name: Build worker
         working-directory: worker
